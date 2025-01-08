@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
+    
     private Rigidbody2D rb;
     private float inputH;
+    [Header("Movement")]
+    [SerializeField] private float groundDetectionDistance = 0.15f;
     [SerializeField] private float horizontalSpeed;
     [SerializeField] private float jumpForce;
+    [SerializeField] private LayerMask whatIsJumpable;
+    [SerializeField] private Transform feet;
+    private bool isOnGround;
 
     [Header("Combat system")]
     [SerializeField] private Transform attackPoint;
@@ -48,9 +53,14 @@ public class Player : MonoBehaviour
         }
     }
 
+    private bool Grounded()
+    {
+        return Physics2D.Raycast(feet.position, Vector3.down, groundDetectionDistance, whatIsJumpable);
+
+    }
     private void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && Grounded())
         {
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             anim.SetTrigger("jump");
