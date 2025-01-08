@@ -9,21 +9,78 @@ public class Player : MonoBehaviour
     private float inputH;
     [SerializeField] private float horizontalSpeed;
     [SerializeField] private float jumpForce;
+
+    [Header("Combat system")]
+    [SerializeField] private Transform attackPoint;
+    [SerializeField] private float attackRadius;
+    [SerializeField] private float attackDamage;
+    [SerializeField] private LayerMask whatIsDamageable;
+    private Animator anim;
     // Start is called before the first frame update
     void Start()
     {
         rb  = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        inputH = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector2(inputH * horizontalSpeed, rb.velocity.y);
+        Movement();
+        Jump();
+        LaunchAttack();
+    }
 
+    private void LaunchAttack()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            anim.SetTrigger("attack");
+        }
+    }
+    //Executed from animation event
+    private void Attack()
+    {
+        Collider2D[] collisions = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, whatIsDamageable);
+        foreach (Collider2D collision in collisions) 
+        { 
+            collision.gameObject.GetComponent<LifeSystem>().ReceiveDamage(attackDamage);
+        }
+    }
+
+    private void Jump()
+    {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            anim.SetTrigger("jump");
         }
+    }
+
+    private void Movement()
+    {
+        inputH = Input.GetAxisRaw("Horizontal");
+        rb.velocity = new Vector2(inputH * horizontalSpeed, rb.velocity.y);
+        if (inputH != 0)
+        {
+            anim.SetBool("running", true);
+            if(inputH > 0)
+            {
+                transform.eulerAngles = Vector3.zero;
+            }
+            else
+            {
+                transform.eulerAngles = new Vector3(0, 180, 0);
+            }
+        }
+        else
+        {
+            anim.SetBool("running", false);
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere(attackPoint.position, attackRadius);
     }
 }
