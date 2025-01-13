@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Slime : Enemy, ICanAttack
+public class Bat : Enemy, ICanAttack
 {
     private Animator anim;
+
     private void Start()
     {
         anim = GetComponent<Animator>();
@@ -16,6 +17,6 @@ public class Slime : Enemy, ICanAttack
 
     public void StopAttacking()
     {
-        
+        anim.SetTrigger("stopAttacking");
     }
 }
