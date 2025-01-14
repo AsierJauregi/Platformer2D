@@ -25,11 +25,12 @@ public class Wizard : Enemy, ICanAttack
     public void Attack()
     {
         anim.SetTrigger("attack");
+        anim.SetBool("stopAttacking", false);
     }
 
     public void StopAttacking()
     {
         Debug.Log("Stopping attack animation");
-        anim.SetTrigger("stopAttacking");
+        anim.SetBool("stopAttacking", true);
     }
 }

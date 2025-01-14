@@ -16,7 +16,7 @@ public class ChaseState : State<EnemyController>
     public override void OnEnterState(EnemyController controller)
     {
         base.OnEnterState(controller);
-
+        Debug.Log(gameObject.name + " entered chasing state");
     }
 
     public override void OnUpdateState()
@@ -34,6 +34,7 @@ public class ChaseState : State<EnemyController>
             {
                 if (Vector3.Distance(transform.position, target.position) > chasingDistance)
                 {
+                    Debug.Log(Vector3.Distance(transform.position, target.position).ToString() + " > " + chasingDistance.ToString());
                     controller.ChangeState(controller.PatrolState);
                 }
             }
@@ -50,8 +51,8 @@ public class ChaseState : State<EnemyController>
         else
         {
             float directionX;
-            if (target.position.x > transform.position.x) directionX = 1;
-            else directionX = -1;
+            if (target.position.x > transform.position.x) directionX = -1;
+            else directionX = 1;
 
             if(Physics2D.Raycast(transform.position, Vector3.down, groundDetectionDistance, whatIsJumpable))
             {
@@ -77,7 +78,8 @@ public class ChaseState : State<EnemyController>
         if (collision.gameObject.CompareTag(playerDetectorTag))
         {
             target = collision.transform;
-            chasingDistance = Vector3.Distance(transform.position, target.position);
+            chasingDistance = Vector3.Distance(transform.position, target.position) + 1;
+            
         }
     }
     public override void OnExitState()

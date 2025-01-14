@@ -18,5 +18,6 @@ public class Bat : Enemy, ICanAttack
     public void StopAttacking()
     {
         anim.SetTrigger("stopAttacking");
+
     }
 }

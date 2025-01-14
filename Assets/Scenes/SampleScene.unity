@@ -8807,6 +8807,10 @@ PrefabInstance:
       propertyPath: m_Constraints
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 2238225600269840263, guid: 54b5cf4fc3f4ef84481613d6bc115349, type: 3}
+      propertyPath: m_FlipX
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2821545260722737090, guid: 54b5cf4fc3f4ef84481613d6bc115349, type: 3}
       propertyPath: attackDamage
       value: 20
