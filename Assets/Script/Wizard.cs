@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Wizard : Enemy, ICanAttack
 {
-    [SerializeField] private GameObject fireball;
+    [SerializeField] private GameObject fireballPrefab;
     [SerializeField] private Transform spawnPoint;
     //[SerializeField] private float attackDamage;
     private Animator anim;
@@ -13,13 +13,13 @@ public class Wizard : Enemy, ICanAttack
     private void Start()
     {
         anim = GetComponent<Animator>();
-        
+        fireballPrefab.GetComponent<Fireball>().AttackDamage = AttackDamage;
     }
 
     //This method is called from the animator
     private void LaunchFireball()
     {
-        Instantiate(fireball, spawnPoint.position, transform.rotation);
+        Instantiate(fireballPrefab, spawnPoint.position, transform.rotation);
     }
 
     public void Attack()

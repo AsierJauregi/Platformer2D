@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float attackRadius;
     [SerializeField] private float attackDamage;
     [SerializeField] private LayerMask whatIsDamageable;
+    [SerializeField] private string fireballTag;
     private Animator anim;
     // Start is called before the first frame update
     void Start()
@@ -48,8 +49,16 @@ public class Player : MonoBehaviour
     {
         Collider2D[] collisions = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, whatIsDamageable);
         foreach (Collider2D collision in collisions) 
-        { 
-            collision.gameObject.GetComponent<LifeSystem>().ReceiveDamage(attackDamage);
+        {
+            if (!collision.gameObject.CompareTag(fireballTag))
+            {
+                collision.gameObject.GetComponent<LifeSystem>().ReceiveDamage(attackDamage);
+            }
+            else
+            {
+                //Devolver el fireball
+                collision.gameObject.GetComponent<Fireball>().GetParried();
+            }
         }
     }
 

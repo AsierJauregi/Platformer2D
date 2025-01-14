@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PlayerHitbox
   - PlayerDetector
+  - Fireball
   layers:
   - Default
   - TransparentFX

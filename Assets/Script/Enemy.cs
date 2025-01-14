@@ -7,12 +7,14 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] private string playerHitboxTag = "";
     [SerializeField] private float attackDamage;
 
+    public float AttackDamage { get => attackDamage;}
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag(playerHitboxTag))
         {
             Debug.Log("Player hit by " + gameObject.name);
-            collision.gameObject.GetComponent<LifeSystem>().ReceiveDamage(attackDamage);
+            collision.gameObject.GetComponent<LifeSystem>().ReceiveDamage(AttackDamage);
 
         }
     }
