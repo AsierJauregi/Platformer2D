@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Bat : Enemy, ICanAttack
 {
-    private Animator anim;
 
     private void Start()
     {
@@ -20,4 +19,5 @@ public class Bat : Enemy, ICanAttack
         anim.SetTrigger("stopAttacking");
 
     }
+
 }

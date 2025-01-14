@@ -5,23 +5,19 @@ using UnityEngine;
 public class Wizard : Enemy, ICanAttack
 {
     [SerializeField] private GameObject fireballPrefab;
-    [SerializeField] private Transform spawnPoint;
-    //[SerializeField] private float attackDamage;
-    private Animator anim;
 
     // Start is called before the first frame update
     private void Start()
     {
         anim = GetComponent<Animator>();
-        fireballPrefab.GetComponent<Fireball>().AttackDamage = AttackDamage;
+        fireballPrefab.GetComponent<Fireball>().AttackDamage = attackDamage;
     }
 
     //This method is called from the animator
-    private void LaunchFireball()
+    public override void LaunchAttack()
     {
-        Instantiate(fireballPrefab, spawnPoint.position, transform.rotation);
+        Instantiate(fireballPrefab, attackPoint.position, transform.rotation);
     }
-
     public void Attack()
     {
         anim.SetTrigger("attack");
@@ -33,4 +29,6 @@ public class Wizard : Enemy, ICanAttack
         Debug.Log("Stopping attack animation");
         anim.SetBool("stopAttacking", true);
     }
+
+    
 }
