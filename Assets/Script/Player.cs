@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float jumpForce;
     [SerializeField] private LayerMask whatIsJumpable;
     [SerializeField] private Transform feet;
+    [SerializeField] private string movablePlatformTag = "Movable Platform";
     private bool isOnGround;
 
     [Header("Combat system")]
@@ -95,6 +96,22 @@ public class Player : MonoBehaviour
         else
         {
             anim.SetBool("running", false);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag(movablePlatformTag))
+        {
+            transform.SetParent(collision.transform);
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag(movablePlatformTag))
+        {
+            transform.SetParent(null);
         }
     }
 

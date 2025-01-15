@@ -7,6 +7,7 @@ TagManager:
   - PlayerHitbox
   - PlayerDetector
   - Fireball
+  - Movable Platform
   layers:
   - Default
   - TransparentFX
