@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask whatIsJumpable;
     [SerializeField] private Transform feet;
     [SerializeField] private string movablePlatformTag = "Movable Platform";
+    [SerializeField] private float voidY;
     private bool isOnGround;
 
     [Header("Combat system")]
@@ -36,6 +38,7 @@ public class Player : MonoBehaviour
         Movement();
         Jump();
         LaunchAttack();
+        Falls();
     }
 
     private void LaunchAttack()
@@ -96,6 +99,15 @@ public class Player : MonoBehaviour
         else
         {
             anim.SetBool("running", false);
+        }
+    }
+
+    private void Falls()
+    {
+        if(transform.position.y <= voidY)
+        {
+            string currentSceneName = SceneManager.GetActiveScene().name;
+            SceneManager.LoadScene(currentSceneName);
         }
     }
 
