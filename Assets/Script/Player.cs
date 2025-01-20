@@ -106,9 +106,19 @@ public class Player : MonoBehaviour
     {
         if(transform.position.y <= voidY)
         {
-            string currentSceneName = SceneManager.GetActiveScene().name;
-            SceneManager.LoadScene(currentSceneName);
+            ReloadLevel();
         }
+    }
+
+    public void Die()
+    {
+        ReloadLevel();
+    }
+
+    private static void ReloadLevel()
+    {
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentSceneName);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

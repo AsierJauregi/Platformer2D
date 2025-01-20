@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LifeSystem : MonoBehaviour
 {
-
+    [SerializeField] private string playerTag = "PlayerHitbox";
     [SerializeField] private float lives;
 
     public void ReceiveDamage(float damageReceived)
@@ -12,7 +12,14 @@ public class LifeSystem : MonoBehaviour
         lives -= damageReceived;
         if(lives <= 0)
         {
-            Destroy(this.gameObject);
+            if (this.gameObject.CompareTag(playerTag))
+            {
+                this.gameObject.GetComponent<Player>().Die();
+            }
+            else 
+            {
+                Destroy(this.gameObject);
+            }
         }
     }
 }
