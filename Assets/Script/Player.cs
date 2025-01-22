@@ -16,7 +16,10 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform feet;
     [SerializeField] private string movablePlatformTag = "Movable Platform";
     [SerializeField] private float voidY;
-    private bool isOnGround;
+    [SerializeField] private float extraTimeToJump;
+    [SerializeField] private bool hasExtraTimeToJump = false;
+    [SerializeReference] private bool isOnGround;
+    [SerializeReference] private bool isJumping;
 
     [Header("Combat system")]
     [SerializeField] private Transform attackPoint;
@@ -25,6 +28,7 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask whatIsDamageable;
     [SerializeField] private string fireballTag;
     private Animator anim;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,6 +43,7 @@ public class Player : MonoBehaviour
         Jump();
         LaunchAttack();
         Falls();
+        isGrounded();
     }
 
     private void LaunchAttack()
@@ -66,17 +71,36 @@ public class Player : MonoBehaviour
         }
     }
 
-    private bool Grounded()
+    private void isGrounded()
     {
-        return Physics2D.Raycast(feet.position, Vector3.down, groundDetectionDistance, whatIsJumpable);
 
+        if (Physics2D.Raycast(feet.position, Vector3.down, groundDetectionDistance, whatIsJumpable))
+        {
+            if(!isOnGround) isJumping = false;
+            isOnGround = true;
+        }
+        else
+        { 
+            if(!hasExtraTimeToJump && isOnGround) StartCoroutine(GiveExtraTimeToJump());
+            isOnGround = false;
+            
+        }
+    }
+
+    IEnumerator GiveExtraTimeToJump()
+    {
+        hasExtraTimeToJump = true;
+        yield return new WaitForSeconds(extraTimeToJump);
+        hasExtraTimeToJump = false;
     }
     private void Jump()
     {
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && Grounded())
-        {
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && (isOnGround || hasExtraTimeToJump) && !isJumping)
+        {   
+            isJumping = true;
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             anim.SetTrigger("jump");
+            
         }
     }
 
