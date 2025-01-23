@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,17 +18,25 @@ public class Player : MonoBehaviour
     [SerializeField] private string movablePlatformTag = "Movable Platform";
     [SerializeField] private float voidY;
     [SerializeField] private float extraTimeToJump;
-    [SerializeField] private bool hasExtraTimeToJump = false;
-    [SerializeReference] private bool isOnGround;
-    [SerializeReference] private bool isJumping;
+    private bool hasExtraTimeToJump = false;
+    private bool isOnGround;
+    private bool isJumping;
 
     [Header("Combat system")]
     [SerializeField] private Transform attackPoint;
     [SerializeField] private float attackRadius;
     [SerializeField] private float attackDamage;
     [SerializeField] private LayerMask whatIsDamageable;
+    
     [SerializeField] private string fireballTag;
     private Animator anim;
+
+    [Header("Interact system")]
+    [SerializeField] private LayerMask whatIsInteractable;
+    private bool isHovering;
+    private HashSet<Collider2D> currentlyDetectedObjects = new HashSet<Collider2D>();
+    private HashSet<Collider2D> detectedThisFrame = new HashSet<Collider2D>();
+
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +53,7 @@ public class Player : MonoBehaviour
         LaunchAttack();
         Falls();
         isGrounded();
+        Interact();
     }
 
     private void LaunchAttack()
@@ -69,6 +79,31 @@ public class Player : MonoBehaviour
                 collision.gameObject.GetComponent<Fireball>().GetParried();
             }
         }
+    }
+    private void Interact()
+    {
+        Collider2D[] collisions = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, whatIsInteractable);
+        foreach(Collider2D collision in collisions)
+        {
+            if (!currentlyDetectedObjects.Contains(collision))
+            {
+                currentlyDetectedObjects.Add(collision);
+                collision.gameObject.GetComponent<ICanInteract>().OnHoverEnter();
+            }
+            else if (currentlyDetectedObjects.Contains(collision) && Input.GetKeyDown(KeyCode.E))
+            {
+                collision.gameObject.GetComponent<ICanInteract>().Interact();
+            }
+        }
+        if (collisions.Length <= 0)
+        {
+            foreach (Collider2D obj in currentlyDetectedObjects)
+            {
+                obj.gameObject.GetComponent<ICanInteract>().OnHoverExit();
+            }
+            currentlyDetectedObjects.Clear();
+        }
+
     }
 
     private void isGrounded()

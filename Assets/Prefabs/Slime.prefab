@@ -147,7 +147,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48bc62ab7c21ecb498258b6f8edad3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerTag: PlayerHitbox
   lives: 40
+  damageFeedbackTime: 0.2
 --- !u!212 &2238225600269840263
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -236,6 +238,10 @@ MonoBehaviour:
   playerHitboxTag: 
   attackDamage: 0
   attackPoint: {fileID: 0}
+  attackRadius: 0
+  whatIsHittable:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!50 &1786777397331664209
 Rigidbody2D:
   serializedVersion: 4
