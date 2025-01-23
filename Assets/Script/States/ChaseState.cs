@@ -50,13 +50,10 @@ public class ChaseState : State<EnemyController>
         }
         else
         {
-            float directionX;
-            if (target.position.x > transform.position.x) directionX = -1;
-            else directionX = 1;
 
             if(Physics2D.Raycast(transform.position, Vector3.down, groundDetectionDistance, whatIsJumpable))
             {
-                transform.Translate(Vector3.right * directionX * chaseSpeed * Time.deltaTime);
+                transform.Translate(Vector3.right * chaseSpeed * Time.deltaTime);
             }
             
         }
