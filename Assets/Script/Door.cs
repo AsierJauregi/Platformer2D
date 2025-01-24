@@ -8,7 +8,7 @@ public class Door : MonoBehaviour, ICanInteract
     [SerializeField] private GameObject canvasObj;
     private Canvas canvas;
     private bool hovering;
-    [SerializeField] private GameObject eventSystem;
+    [SerializeField] private GameObject transitionPanel;
     
     // Start is called before the first frame update
     void Start()
@@ -34,7 +34,7 @@ public class Door : MonoBehaviour, ICanInteract
         if (hovering)
         {
             Debug.Log("Interacted with " + gameObject.name);
-            eventSystem.GetComponent<SceneLoader>().LoadScene();
+            transitionPanel.GetComponent<SceneLoader>().LoadScene();
         }
     }
 
